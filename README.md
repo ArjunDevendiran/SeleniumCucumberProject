@@ -12,5 +12,6 @@ Branch 2: feature/B2_Add_Dependencies_in_POM
   * JUnit
   * Cucumber JVM: JUnit
   * Selenium Java
+  * WebDriverManager
 
 - Installed Cucumber Eclipse Plugin.
