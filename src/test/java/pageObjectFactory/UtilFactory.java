@@ -14,10 +14,9 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import pageLocatorFactory.UtilLocatorFactory;
 
 public class UtilFactory extends UtilLocatorFactory {
-	
-	// Declaring and initializing the driver and webElement variables 
-	private WebDriver driver = null;
-	private WebElement webElement = null;
+
+	private static WebDriver driver = null;
+	private static WebElement webElement = null;
 
 	public void browserSetup() {
 
@@ -164,6 +163,17 @@ public class UtilFactory extends UtilLocatorFactory {
 	protected String getAttributeValue(String locatorType, String locatorValue, String attributeName) {
 		webElement = getElement(locatorType, locatorValue);
 		return webElement.getAttribute(attributeName);
+	}
+
+	public String getElementReplacementString(String locatorValue, String replacement) {
+		locatorValue = locatorValue.replaceAll("\\$\\{.+?\\}", replacement);
+		return locatorValue;
+	}
+
+	public String getElementReplacementString(String locatorValue, String replacement1, String replacement2) {
+		locatorValue = locatorValue.replaceFirst("\\$\\{.+?\\}", replacement1);
+		locatorValue = locatorValue.replaceFirst("\\$\\{.+?\\}", replacement2);
+		return locatorValue;
 	}
 
 }
