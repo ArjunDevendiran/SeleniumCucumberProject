@@ -44,4 +44,10 @@ Branch 4: feature/B4_Create_Test_Script
 		7. @Then("Print all the names and price of products, ordered from low to high price")
 			- Printing the product name and price in console
 
-- Note: Removed few code snippets which are not required			
+- Note: Removed few code snippets which are not required	
+
+Branch 5: feature/B5_Restructuring_Code
+- Created UtilFactory.java class in pageObjectFactory package - It contains all the generic functions
+- Created UtilLocatorFactory.java in pageLocatorFactory package - It contains all the constants of generic functions
+- Created SearchPageLocatorFactory.java in pageLocatorFactory package - It contains all the Locators of SearchPage	
+- In SearchResultPage.java Replaced the raw codes with generic functions from UtilFactory.java	

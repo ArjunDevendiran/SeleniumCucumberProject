@@ -14,10 +14,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import pageLocatorFactory.UtilLocatorFactory;
 
 public class UtilFactory extends UtilLocatorFactory {
-
-	// Declaring and initializing the driver variable
-	protected WebDriver driver = null;
-	WebElement webElement = null;
+	
+	// Declaring and initializing the driver and webElement variables 
+	private WebDriver driver = null;
+	private WebElement webElement = null;
 
 	public void browserSetup() {
 
