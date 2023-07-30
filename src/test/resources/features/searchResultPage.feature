@@ -4,8 +4,7 @@ Feature: feature to test search result page and filter functionality
     Given user is in home page
     When user enters a <searchKeyword> in search box
     And clicks search submit button
-    And user is navigated to search results page
-    Then Validate the results for <searchKeyword> are showing in SRP
+    Then Validate <expectedText> is displayed in Search result page
     When user selects <filterOption> filter option under <filterType> filter
     Then Validate all the product list displays price
     And Print all the names and price of products, ordered from low to high price
