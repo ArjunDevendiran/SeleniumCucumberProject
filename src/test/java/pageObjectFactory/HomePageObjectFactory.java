@@ -1,5 +1,7 @@
 package pageObjectFactory;
 
+import baseFactory.Log4jWrapper;
+import baseFactory.UtilFactory;
 import pageLocatorFactory.HomePageLocatorFactory;
 
 public class HomePageObjectFactory extends UtilFactory {
@@ -7,13 +9,8 @@ public class HomePageObjectFactory extends UtilFactory {
 	HomePageLocatorFactory homPageLocator = new HomePageLocatorFactory();
 	
 	public void loadHomePage(String url) {
-
-		try {
-			loadUrl(url);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		loadUrl(url);
 	}
 	
 	public void enterTextInSearchField(String searchText) {
@@ -24,7 +21,8 @@ public class HomePageObjectFactory extends UtilFactory {
 			enterString(LOCATOR_TYPE_XPATH, searchFieldlocatorValue, searchText);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get element");
+			throw e;
 		}
 	}
 	
@@ -36,7 +34,8 @@ public class HomePageObjectFactory extends UtilFactory {
 			click(LOCATOR_TYPE_XPATH, searchSubmitBtnlocatorValue);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get element");
+			throw e;
 		}
 	}
 

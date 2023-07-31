@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
+import baseFactory.Log4jWrapper;
+import baseFactory.UtilFactory;
 import pageLocatorFactory.SearchResultPageLocatorFactory;
 
 public class SearchResultPageObjectFactory extends UtilFactory {
@@ -20,21 +23,25 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 			String actualText = getText(LOCATOR_TYPE_XPATH, searchResultInfoBarlocatorValue);
 
 			validateTextContains(actualText, expectedText);
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get Search element");
+			throw e;
 		}
 	}
 	
 	public void scrollToFilterSection(String filterType) throws Exception {
 
 		String filterSectionlocatorPart = searchResultPageLocator.XPATH_FILTER_SECTION_LOCATOR_PART;
-		
-		String filterSectionlocatorValue = getElementReplacementString(filterSectionlocatorPart, filterType);
 
 		try {
+			String filterSectionlocatorValue = getElementReplacementString(filterSectionlocatorPart, filterType);
+			
 			scrollElementIntoView(LOCATOR_TYPE_XPATH, filterSectionlocatorValue);
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get filter element");
+			throw e;
 		}
 	}
 	
@@ -42,15 +49,16 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 
 		String filterSectionlocatorPart = searchResultPageLocator.XPATH_FILTER_SECTION_LOCATOR_PART;
 		String filterOptionlocatorPart = searchResultPageLocator.XPATH_FILTER_OPTION_LOCATOR_PART;
-		
 		String combinedLocatorValue = filterSectionlocatorPart + filterOptionlocatorPart;
-		
-		String filterOptionlocatorValue = getElementReplacementString(combinedLocatorValue, filterType, filterOption);
 
 		try {
+			String filterOptionlocatorValue = getElementReplacementString(combinedLocatorValue, filterType, filterOption);
+			
 			click(LOCATOR_TYPE_XPATH, filterOptionlocatorValue);
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get filter option element");
+			throw e;
 		}
 	}
 	
@@ -76,21 +84,24 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 
 				// Validating whether the price text is displayed or not
 				if (!priceText.isEmpty()) {
-					System.out.println("Product tile at position - " + (i - 1) + " is displaying price.");
+					Log4jWrapper.info("Product tile at position - " + i + " is displaying price.");
 				} else {
 					ProductTilesDisplayPrice = false;
-					System.out.println("Product tile at position - " + (i - 1) + " is not displaying price.");
+					Log4jWrapper.warn("Product tile at position - " + i + " is not displaying price.");
 				}
 			}
 
 			// Printing the overall status of price display
 			if (ProductTilesDisplayPrice) {
-				System.out.println("All the Product tiles are displaying price.");
+				Log4jWrapper.info("All the Product tiles are displaying price.");
+				Assert.assertTrue("Validated all Products have price.", ProductTilesDisplayPrice);
 			} else {
-				System.out.println("Few Product tiles are not displaying price.");
+				Log4jWrapper.error("Few Product tiles are not displaying price.");
+				Assert.assertTrue("All products should have price.", ProductTilesDisplayPrice);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get product elements.");
+			throw e;
 		}
 	}
 	
@@ -135,11 +146,13 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 			}
 			
 			// Printing the names and prices of each product, ordered from low to high price
+			Log4jWrapper.info("\n\n\n" +"Below is the list of Product's name and Price in Ascending order:" + "\n\n\n");
 			for (Object[] productData : productList) {
-				System.out.println("Product: " + productData[0] + ", Price: $" + productData[1]);
+				Log4jWrapper.info("Product: " + productData[0] + ", Price: $" + productData[1]);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log4jWrapper.error("Could not get product elements.");
+			throw e;
 		}
 	}
 
