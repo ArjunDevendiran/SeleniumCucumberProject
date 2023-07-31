@@ -66,3 +66,8 @@ Branch 7: feature/B7_Restructuring_Code
 Branch 8: feature/B8_Restructuring_Code
 - Parameterized Test Data in the steps of searchResultPage.feature
 - Added the comments for each steps in searchResultPage.java
+
+Branch 9: feature/B9_Implementing_log4j
+- Added dependencies - log4j-core and log4j-api
+- Created log4j.xml file and a wrapper class to call log4j functions
+- Created step definition with DataTable and commented this code

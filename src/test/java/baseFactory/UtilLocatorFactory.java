@@ -1,4 +1,4 @@
-package pageLocatorFactory;
+package baseFactory;
 
 public class UtilLocatorFactory {
 
