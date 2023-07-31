@@ -1,11 +1,14 @@
 package pageObjectFactory;
 
+import pageLocatorFactory.HomePageLocatorFactory;
+
 public class HomePageObjectFactory extends UtilFactory {
+	
+	HomePageLocatorFactory homPageLocator = new HomePageLocatorFactory();
 	
 	public void loadHomePage(String url) {
 
 		try {
-			// Loading Test url
 			loadUrl(url);
 
 		} catch (Exception e) {
@@ -15,10 +18,10 @@ public class HomePageObjectFactory extends UtilFactory {
 	
 	public void enterTextInSearchField(String searchText) {
 
-		String locatorValue = "//*[@placeholder='Search Amazon']";
+		String searchFieldlocatorValue = homPageLocator.XPATH_SEARCH_FIELD;
 		
 		try {
-			enterString(LOCATOR_TYPE_XPATH, locatorValue, searchText);
+			enterString(LOCATOR_TYPE_XPATH, searchFieldlocatorValue, searchText);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -27,11 +30,10 @@ public class HomePageObjectFactory extends UtilFactory {
 	
 	public void clickSearchSubmitButton() {
 
-		String locatorValue = "//*[@id='nav-search-submit-button']";
+		String searchSubmitBtnlocatorValue = homPageLocator.XPATH_SEARCH_SUBMIT_BUTTON;
 
 		try {
-			// Clicking Search submit link
-			click(LOCATOR_TYPE_XPATH, locatorValue);
+			click(LOCATOR_TYPE_XPATH, searchSubmitBtnlocatorValue);
 
 		} catch (Exception e) {
 			e.printStackTrace();
