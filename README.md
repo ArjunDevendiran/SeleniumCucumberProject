@@ -50,4 +50,10 @@ Branch 5: feature/B5_Restructuring_Code
 - Created UtilFactory.java class in pageObjectFactory package - It contains all the generic functions
 - Created UtilLocatorFactory.java in pageLocatorFactory package - It contains all the constants of generic functions
 - Created SearchPageLocatorFactory.java in pageLocatorFactory package - It contains all the Locators of SearchPage	
-- In SearchResultPage.java Replaced the raw codes with generic functions from UtilFactory.java	
+- In SearchResultPage.java Replaced the raw codes with generic functions from UtilFactory.java
+
+Branch 6: feature/B6_Restructuring_Code	
+- Created HomePageObjectFactory.java class in pageObjectFactory package - It contains all the functions dedicated to Home page
+- Updated UtilLocatorFactory.java in pageLocatorFactory package with few more generic functions
+- Updated SearchPageObjectFactory.java to SearchResultPageObjectFactory.java and added all the functions dedicated to Search result page	
+- In SearchResultPage.java Replaced the generic functions (called from UtilFactory.java) with the page object functions defined in pageObjectFactory classes
