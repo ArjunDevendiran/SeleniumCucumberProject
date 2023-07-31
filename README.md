@@ -62,3 +62,7 @@ Branch 7: feature/B7_Restructuring_Code
 - Created HomePageLoctcatorFactory.java class in pageLocatorFactory package - It contains all the Locators of the Home page elements
 - Updated SearchPageLocatorFactory to SearchResultPageLocatorFactory.java class in pageLocatorFactory package - It contains all the Locators of the Search result page elements
 - Added common attributes in UtilLocatorFactory.java
+
+Branch 8: feature/B8_Restructuring_Code
+- Parameterized Test Data in the steps of searchResultPage.feature
+- Added the comments for each steps in searchResultPage.java
