@@ -6,15 +6,18 @@ import java.util.List;
 
 import org.openqa.selenium.WebElement;
 
+import pageLocatorFactory.SearchResultPageLocatorFactory;
+
 public class SearchResultPageObjectFactory extends UtilFactory {
+	
+	SearchResultPageLocatorFactory searchResultPageLocator = new SearchResultPageLocatorFactory();
 	
 	public void validateTextInSearchResultInfoBar(String expectedText) {
 
-		String locatorValue = "//*[contains(@data-component-type,'result-info-bar')]";
+		String searchResultInfoBarlocatorValue = searchResultPageLocator.XPATH_SEARCH_RESULT_INFO_BAR;
 
 		try {
-			// Fetching the validation text from AUT
-			String actualText = getText(LOCATOR_TYPE_XPATH, locatorValue);
+			String actualText = getText(LOCATOR_TYPE_XPATH, searchResultInfoBarlocatorValue);
 
 			validateTextContains(actualText, expectedText);
 		} catch (Exception e) {
@@ -24,7 +27,7 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 	
 	public void scrollToFilterSection(String filterType) throws Exception {
 
-		String filterSectionlocatorPart = "//*[@id='filters']//*[text()='${text}']";
+		String filterSectionlocatorPart = searchResultPageLocator.XPATH_FILTER_SECTION_LOCATOR_PART;
 		
 		String filterSectionlocatorValue = getElementReplacementString(filterSectionlocatorPart, filterType);
 
@@ -37,9 +40,12 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 	
 	public void selectFilterOption(String filterType, String filterOption) throws Exception {
 
-		String filterOptionlocatorPart = "//*[@id='filters']//*[text()='${text}']//ancestor::div[contains(@id,'_browse-bin-title')]//following-sibling::*[position()=1]//*[@aria-label='${text}']//a";
+		String filterSectionlocatorPart = searchResultPageLocator.XPATH_FILTER_SECTION_LOCATOR_PART;
+		String filterOptionlocatorPart = searchResultPageLocator.XPATH_FILTER_OPTION_LOCATOR_PART;
 		
-		String filterOptionlocatorValue = getElementReplacementString(filterOptionlocatorPart, filterType, filterOption);
+		String combinedLocatorValue = filterSectionlocatorPart + filterOptionlocatorPart;
+		
+		String filterOptionlocatorValue = getElementReplacementString(combinedLocatorValue, filterType, filterOption);
 
 		try {
 			click(LOCATOR_TYPE_XPATH, filterOptionlocatorValue);
@@ -50,10 +56,12 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 	
 	public void validateAllSrpProductPricesAreDisplayed(boolean ProductTilesDisplayPrice) {
 
-		String pdtTileLocatorValue = "//*[contains(@cel_widget_id,'MAIN-SEARCH_RESULTS')]";
-		String priceLocatorStart = "(//*[contains(@cel_widget_id,'MAIN-SEARCH_RESULTS')]//*[@data-a-color='base']//*[@class='a-offscreen'])[";
-		String LocatorEnd = "]";
-		String attributeName = "innerText";
+		String LocatorOpen = LOCATOR_SQUARE_BRACKET_OPEN;
+		String LocatorClose = LOCATOR_SQUARE_BRACKET_CLOSE;
+		String attributeName = ATTRIBUTE_INNER_TEXT;
+		
+		String pdtTileLocatorValue = searchResultPageLocator.XPATH_PRODUCT_TILES;
+		String priceLocatorPart = searchResultPageLocator.XPATH_PRODUCT_TILES_PRICE;
 		
 		try {
 			// Getting the list of product tiles
@@ -61,17 +69,17 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 
 			for (int i = 1; i < productsList.size(); i++) {
 
-				String productPriceLocatorValue = priceLocatorStart + i + LocatorEnd;
+				String productPriceLocatorValue = priceLocatorPart + LocatorOpen + i + LocatorClose;
 
 				// Getting the price of each product
 				String priceText = getAttributeValue(LOCATOR_TYPE_XPATH, productPriceLocatorValue, attributeName);
 
 				// Validating whether the price text is displayed or not
 				if (!priceText.isEmpty()) {
-					System.out.println("Product tile at index position - " + i + " is displaying price.");
+					System.out.println("Product tile at position - " + (i - 1) + " is displaying price.");
 				} else {
 					ProductTilesDisplayPrice = false;
-					System.out.println("Product tile at index position - " + i + " is not displaying price.");
+					System.out.println("Product tile at position - " + (i - 1) + " is not displaying price.");
 				}
 			}
 
@@ -87,12 +95,14 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 	}
 	
 	public void printAllSrpProductNamesAndPriceOrderedFromPriceLowToHigh() {
-
-		String pdtTileLocatorValue = "//*[contains(@cel_widget_id,'MAIN-SEARCH_RESULTS')]";
-		String attributeName = "innerText";
-		String priceLocatorStart = "(//*[contains(@cel_widget_id,'MAIN-SEARCH_RESULTS')]//*[@data-a-color='base']//*[@class='a-offscreen'])[";
-		String nameLocatorStart = "(//*[contains(@cel_widget_id,'MAIN-SEARCH_RESULTS')]//*[contains(@class,'a-color-base a-text-normal')])[";
-		String LocatorEnd = "]";
+		
+		String LocatorOpen = LOCATOR_SQUARE_BRACKET_OPEN;
+		String LocatorClose = LOCATOR_SQUARE_BRACKET_CLOSE;
+		String attributeName = ATTRIBUTE_INNER_TEXT;
+		
+		String pdtTileLocatorValue = searchResultPageLocator.XPATH_PRODUCT_TILES;
+		String priceLocatorPart = searchResultPageLocator.XPATH_PRODUCT_TILES_PRICE;
+		String nameLocatorPart = searchResultPageLocator.XPATH_PRODUCT_TILES_NAME;
 
 		try {
 			// Getting the list of product tiles
@@ -104,8 +114,8 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 			// Extracting the product names and prices and adding them to productList
 			for (int i = 1; i < productsList.size(); i++) {
 
-				String productNameLocatorValue = nameLocatorStart + i + LocatorEnd;
-				String productPriceLocatorValue = priceLocatorStart + i + LocatorEnd;
+				String productNameLocatorValue = nameLocatorPart + LocatorOpen + i + LocatorClose;
+				String productPriceLocatorValue = priceLocatorPart + LocatorOpen + i + LocatorClose;
 
 				// Getting the price of each product
 				String priceText = getAttributeValue(LOCATOR_TYPE_XPATH, productPriceLocatorValue, attributeName);
@@ -123,8 +133,7 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 				// Sorting the products based on their prices (low to high)
 				productList.sort(Comparator.comparingDouble(SearchResultPageObjectFactory::getPrice));
 			}
-			System.out.println("==================================================================================");
-
+			
 			// Printing the names and prices of each product, ordered from low to high price
 			for (Object[] productData : productList) {
 				System.out.println("Product: " + productData[0] + ", Price: $" + productData[1]);

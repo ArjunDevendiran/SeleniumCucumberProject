@@ -52,8 +52,13 @@ Branch 5: feature/B5_Restructuring_Code
 - Created SearchPageLocatorFactory.java in pageLocatorFactory package - It contains all the Locators of SearchPage	
 - In SearchResultPage.java Replaced the raw codes with generic functions from UtilFactory.java
 
-Branch 6: feature/B6_Restructuring_Code	
+Branch 6: feature/B6_Restructuring_Code
 - Created HomePageObjectFactory.java class in pageObjectFactory package - It contains all the functions dedicated to Home page
 - Updated UtilLocatorFactory.java in pageLocatorFactory package with few more generic functions
 - Updated SearchPageObjectFactory.java to SearchResultPageObjectFactory.java and added all the functions dedicated to Search result page	
 - In SearchResultPage.java Replaced the generic functions (called from UtilFactory.java) with the page object functions defined in pageObjectFactory classes
+
+Branch 7: feature/B7_Restructuring_Code
+- Created HomePageLoctcatorFactory.java class in pageLocatorFactory package - It contains all the Locators of the Home page elements
+- Updated SearchPageLocatorFactory to SearchResultPageLocatorFactory.java class in pageLocatorFactory package - It contains all the Locators of the Search result page elements
+- Added common attributes in UtilLocatorFactory.java
