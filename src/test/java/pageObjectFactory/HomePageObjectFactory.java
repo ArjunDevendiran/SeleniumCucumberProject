@@ -5,30 +5,28 @@ import baseFactory.UtilFactory;
 import pageLocatorFactory.HomePageLocatorFactory;
 
 public class HomePageObjectFactory extends UtilFactory {
-	
-	HomePageLocatorFactory homPageLocator = new HomePageLocatorFactory();
-	
+
 	public void loadHomePage(String url) {
-		
+
 		loadUrl(url);
 	}
-	
+
 	public void enterTextInSearchField(String searchText) {
 
-		String searchFieldlocatorValue = homPageLocator.XPATH_SEARCH_FIELD;
-		
+		String searchFieldlocatorValue = HomePageLocatorFactory.CSS_SEARCH_FIELD;
+
 		try {
-			enterString(LOCATOR_TYPE_XPATH, searchFieldlocatorValue, searchText);
+			enterString(LOCATOR_TYPE_CSS_SELECTOR, searchFieldlocatorValue, searchText);
 
 		} catch (Exception e) {
 			Log4jWrapper.error("Could not get element");
 			throw e;
 		}
 	}
-	
+
 	public void clickSearchSubmitButton() {
 
-		String searchSubmitBtnlocatorValue = homPageLocator.XPATH_SEARCH_SUBMIT_BUTTON;
+		String searchSubmitBtnlocatorValue = HomePageLocatorFactory.XPATH_SEARCH_SUBMIT_BUTTON;
 
 		try {
 			click(LOCATOR_TYPE_XPATH, searchSubmitBtnlocatorValue);

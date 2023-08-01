@@ -12,82 +12,118 @@ import baseFactory.UtilFactory;
 import pageLocatorFactory.SearchResultPageLocatorFactory;
 
 public class SearchResultPageObjectFactory extends UtilFactory {
-	
-	SearchResultPageLocatorFactory searchResultPageLocator = new SearchResultPageLocatorFactory();
-	
+
 	public void validateTextInSearchResultInfoBar(String expectedText) {
 
-		String searchResultInfoBarlocatorValue = searchResultPageLocator.XPATH_SEARCH_RESULT_INFO_BAR;
+		String searchResultInfoBarlocatorValue = SearchResultPageLocatorFactory.CSS_SEARCH_RESULT_INFO_BAR;
 
 		try {
-			String actualText = getText(LOCATOR_TYPE_XPATH, searchResultInfoBarlocatorValue);
+			String actualText = getText(LOCATOR_TYPE_CSS_SELECTOR, searchResultInfoBarlocatorValue);
 
 			validateTextContains(actualText, expectedText);
-			
+
 		} catch (Exception e) {
 			Log4jWrapper.error("Could not get Search element");
 			throw e;
 		}
 	}
-	
-	public void scrollToFilterSection(String filterType) throws Exception {
 
-		String filterSectionlocatorPart = searchResultPageLocator.XPATH_FILTER_SECTION_LOCATOR_PART;
+	public void validateExpectedTextInPdtNamesInSrp(String expectedText) {
+
+		String searchResultInfoBarlocatorValue = SearchResultPageLocatorFactory.CSS_SEARCH_RESULT_INFO_BAR;
+		String pdtNameslocatorPart = SearchResultPageLocatorFactory.XPATH_PRODUCT_TILES_NAME;
+		String LocatorOpen = LOCATOR_SQUARE_BRACKET_OPEN;
+		String LocatorClose = LOCATOR_SQUARE_BRACKET_CLOSE;
+		String attributeName = ATTRIBUTE_INNER_TEXT;
+
+		try {
+			String actualText = getText(LOCATOR_TYPE_CSS_SELECTOR, searchResultInfoBarlocatorValue);
+			validateTextContains(actualText, expectedText);
+
+			// Getting the list of product tiles
+			List<WebElement> productsList = getElementList(LOCATOR_TYPE_XPATH, pdtNameslocatorPart);
+
+			for (int i = 0; i < productsList.size(); i++) {
+
+				String productNameLocatorValue = pdtNameslocatorPart + LocatorOpen + (i + 1) + LocatorClose;
+
+				// Getting the name of each product
+				String name = getAttributeValue(LOCATOR_TYPE_XPATH, productNameLocatorValue, attributeName);
+
+				// Validating Search result product names contains searched terms
+				if (name.contains(expectedText)) {
+					Log4jWrapper.info(
+							"Searched Product tile at position - " + (i + 1) + " is displaying expected text.");
+				} else {
+					Log4jWrapper.warn(
+							"Searched Product tile at position - " + (i + 1) + " is not displaying expected text.");
+				}
+			}
+		} catch (Exception e) {
+			Log4jWrapper.error("Could not get Search element");
+			throw e;
+		}
+	}
+
+	public void scrollToFilterSection(String filterType) {
+
+		String filterSectionlocatorPart = SearchResultPageLocatorFactory.XPATH_FILTER_SECTION_LOCATOR_PART;
 
 		try {
 			String filterSectionlocatorValue = getElementReplacementString(filterSectionlocatorPart, filterType);
-			
+
 			scrollElementIntoView(LOCATOR_TYPE_XPATH, filterSectionlocatorValue);
-			
+
 		} catch (Exception e) {
 			Log4jWrapper.error("Could not get filter element");
 			throw e;
 		}
 	}
-	
-	public void selectFilterOption(String filterType, String filterOption) throws Exception {
 
-		String filterSectionlocatorPart = searchResultPageLocator.XPATH_FILTER_SECTION_LOCATOR_PART;
-		String filterOptionlocatorPart = searchResultPageLocator.XPATH_FILTER_OPTION_LOCATOR_PART;
+	public void selectFilterOption(String filterType, String filterOption) {
+
+		String filterSectionlocatorPart = SearchResultPageLocatorFactory.XPATH_FILTER_SECTION_LOCATOR_PART;
+		String filterOptionlocatorPart = SearchResultPageLocatorFactory.XPATH_FILTER_OPTION_LOCATOR_PART;
 		String combinedLocatorValue = filterSectionlocatorPart + filterOptionlocatorPart;
 
 		try {
-			String filterOptionlocatorValue = getElementReplacementString(combinedLocatorValue, filterType, filterOption);
-			
+			String filterOptionlocatorValue = getElementReplacementString(combinedLocatorValue, filterType,
+					filterOption);
+
 			click(LOCATOR_TYPE_XPATH, filterOptionlocatorValue);
-			
+
 		} catch (Exception e) {
 			Log4jWrapper.error("Could not get filter option element");
 			throw e;
 		}
 	}
-	
+
 	public void validateAllSrpProductPricesAreDisplayed(boolean ProductTilesDisplayPrice) {
 
 		String LocatorOpen = LOCATOR_SQUARE_BRACKET_OPEN;
 		String LocatorClose = LOCATOR_SQUARE_BRACKET_CLOSE;
 		String attributeName = ATTRIBUTE_INNER_TEXT;
-		
-		String pdtTileLocatorValue = searchResultPageLocator.XPATH_PRODUCT_TILES;
-		String priceLocatorPart = searchResultPageLocator.XPATH_PRODUCT_TILES_PRICE;
-		
+
+		String pdtTileLocatorValue = SearchResultPageLocatorFactory.XPATH_PRODUCT_TILES;
+		String priceLocatorPart = SearchResultPageLocatorFactory.XPATH_PRODUCT_TILES_PRICE;
+
 		try {
 			// Getting the list of product tiles
 			List<WebElement> productsList = getElementList(LOCATOR_TYPE_XPATH, pdtTileLocatorValue);
 
-			for (int i = 1; i < productsList.size(); i++) {
+			for (int i = 0; i < productsList.size(); i++) {
 
-				String productPriceLocatorValue = priceLocatorPart + LocatorOpen + i + LocatorClose;
+				String productPriceLocatorValue = priceLocatorPart + LocatorOpen + (i + 1) + LocatorClose;
 
 				// Getting the price of each product
 				String priceText = getAttributeValue(LOCATOR_TYPE_XPATH, productPriceLocatorValue, attributeName);
 
 				// Validating whether the price text is displayed or not
 				if (!priceText.isEmpty()) {
-					Log4jWrapper.info("Product tile at position - " + i + " is displaying price.");
+					Log4jWrapper.info("Product tile at position - " + (i + 1) + " is displaying price.");
 				} else {
 					ProductTilesDisplayPrice = false;
-					Log4jWrapper.warn("Product tile at position - " + i + " is not displaying price.");
+					Log4jWrapper.warn("Product tile at position - " + (i + 1) + " is not displaying price.");
 				}
 			}
 
@@ -104,16 +140,16 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 			throw e;
 		}
 	}
-	
+
 	public void printAllSrpProductNamesAndPriceOrderedFromPriceLowToHigh() {
-		
+
 		String LocatorOpen = LOCATOR_SQUARE_BRACKET_OPEN;
 		String LocatorClose = LOCATOR_SQUARE_BRACKET_CLOSE;
 		String attributeName = ATTRIBUTE_INNER_TEXT;
-		
-		String pdtTileLocatorValue = searchResultPageLocator.XPATH_PRODUCT_TILES;
-		String priceLocatorPart = searchResultPageLocator.XPATH_PRODUCT_TILES_PRICE;
-		String nameLocatorPart = searchResultPageLocator.XPATH_PRODUCT_TILES_NAME;
+
+		String pdtTileLocatorValue = SearchResultPageLocatorFactory.XPATH_PRODUCT_TILES;
+		String priceLocatorPart = SearchResultPageLocatorFactory.XPATH_PRODUCT_TILES_PRICE;
+		String nameLocatorPart = SearchResultPageLocatorFactory.XPATH_PRODUCT_TILES_NAME;
 
 		try {
 			// Getting the list of product tiles
@@ -125,8 +161,8 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 			// Extracting the product names and prices and adding them to productList
 			for (int i = 1; i < productsList.size(); i++) {
 
-				String productNameLocatorValue = nameLocatorPart + LocatorOpen + i + LocatorClose;
-				String productPriceLocatorValue = priceLocatorPart + LocatorOpen + i + LocatorClose;
+				String productNameLocatorValue = nameLocatorPart + LocatorOpen + (i + 1) + LocatorClose;
+				String productPriceLocatorValue = priceLocatorPart + LocatorOpen + (i + 1) + LocatorClose;
 
 				// Getting the price of each product
 				String priceText = getAttributeValue(LOCATOR_TYPE_XPATH, productPriceLocatorValue, attributeName);
@@ -144,11 +180,13 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 				// Sorting the products based on their prices (low to high)
 				productList.sort(Comparator.comparingDouble(SearchResultPageObjectFactory::getPrice));
 			}
-			
+
 			// Printing the names and prices of each product, ordered from low to high price
-			Log4jWrapper.info("\n\n\n" +"Below is the list of Product's name and Price in Ascending order:" + "\n\n\n");
+			Log4jWrapper
+					.info("\n\n\n" + "Below is the list of Product's name and Price in Ascending order:" + "\n\n\n");
+			
 			for (Object[] productData : productList) {
-				Log4jWrapper.info("Product: " + productData[0] + ", Price: $" + productData[1]);
+				Log4jWrapper.info("Price: $" + productData[1] + ", Product: " + productData[0]);
 			}
 		} catch (Exception e) {
 			Log4jWrapper.error("Could not get product elements.");
@@ -156,7 +194,8 @@ public class SearchResultPageObjectFactory extends UtilFactory {
 		}
 	}
 
-	// A static method to extract the price from the product array (method reference)
+	// A static method to extract the price from the product array (method
+	// reference)
 	public static double getPrice(Object[] product) {
 		return (double) product[1];
 	}
