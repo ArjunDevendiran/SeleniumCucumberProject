@@ -41,10 +41,10 @@ public class UtilFactory extends UtilLocatorFactory {
 	public void teardown() {
 
 		try {
-//			driver.close();
-//			driver.quit();
+			driver.close();
+			driver.quit();
 
-			Log4jWrapper.info("Driver instance is terminated.");
+			Log4jWrapper.info("Driver instance terminated gracefully.");
 		} catch (Exception e) {
 			Log4jWrapper.error("Could not terminate Driver instance.");
 			throw e;
@@ -102,7 +102,7 @@ public class UtilFactory extends UtilLocatorFactory {
 
 		if (locatorType.equalsIgnoreCase(LOCATOR_TYPE_XPATH)) {
 			elementLists = driver.findElements(By.xpath(locatorValue));
-		} else if (locatorType.equalsIgnoreCase("LOCATOR_TYPE_CSS_SELECTOR")) {
+		} else if (locatorType.equalsIgnoreCase(LOCATOR_TYPE_CSS_SELECTOR)) {
 			elementLists = driver.findElements(By.cssSelector(locatorValue));
 		} else {
 			Log4jWrapper.warn("Provide valid locator Type");
@@ -160,8 +160,10 @@ public class UtilFactory extends UtilLocatorFactory {
 
 		if (actualText.toLowerCase().contains(expectedText.toLowerCase())) {
 			Assert.assertTrue("Actual text contains Expected Text", true);
+			Log4jWrapper.info("Actual text contains Expected Text");
 		} else {
 			Assert.assertTrue("Actual text does not contain Expected Text", false);
+			Log4jWrapper.error("Actual text does not contain Expected Text");
 		}
 	}
 
